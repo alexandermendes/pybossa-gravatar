@@ -1,0 +1,8 @@
+{
+    "identifier": "pybossa_gravatar",
+    "name": "PyBossaGravatar",
+    "author": "alexenderhmendes@gmail.com",
+    "license": "BSD",
+    "description": "A PyBossa plugin for Gravatar integration.",
+    "version": "0.0.1"
+}
