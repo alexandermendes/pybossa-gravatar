@@ -8,7 +8,7 @@ from pybossa.model.user import User
 from sqlalchemy import event
 
 __plugin__ = "PyBossaGravatar"
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 gravatar = Gravatar()
 
