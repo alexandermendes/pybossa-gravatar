@@ -12,9 +12,9 @@ addons:
 before_install:
   - sudo apt-get update -y && sudo apt-get install -y swig libffi-dev
 install:
-  - python setup.py install
   - git clone --recursive https://github.com/PyBossa/pybossa.git
-  - pip install -r pybossa/requirements.txt
+  - cd pybossa/
+  - pip install -r requirements.txt
   - pip install -U pip
   - pip install --editable pybossa
   - cd pybossa/pybossa/plugins/
