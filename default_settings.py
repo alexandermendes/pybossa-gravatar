@@ -1,0 +1,2 @@
+GRAVATAR_DEFAULT = 'identicon'
+GRAVATAR_SIZE = 200
