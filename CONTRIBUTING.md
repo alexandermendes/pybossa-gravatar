@@ -1,21 +1,21 @@
-# Contributing to pybossa-analyst
+# Contributing to pybossa-gravatar
 
-Following is a very brief set of guidelines for contributing to pybossa-analyst.
+Following is a very brief set of guidelines for contributing to pybossa-gravatar.
 
 
 ## Enhancements
 
-Enhancement suggestions are tracked as [issues](https://github.com/atom/atom/issues),
+Enhancement suggestions are tracked as [issues](https://github.com/alexandermendes/pybossa-gravatar/issues),
 can be created by anyone with a free GitHub account and should include the following:
 
 * A clear and descriptive title.
 * An explanation of why this enhancement would be useful.
-* The `enchancement` [label](https://github.com/alexandermendes/pybossa-analyst/labels).
+* The `enchancement` [label](https://github.com/alexandermendes/pybossa-gravatar/labels).
 
 
 ## Bugs
 
-Bugs are tracked as [issues](https://github.com/atom/atom/issues), can be created
+Bugs are tracked as [issues]((https://github.com/alexandermendes/pybossa-gravatar/issues), can be created
 by anyone with a free GitHub account and should include the following:
 
 * A clear and descriptive title.
@@ -23,7 +23,7 @@ by anyone with a free GitHub account and should include the following:
 * An exanation of the behaviour you observed after following those steps.
 * If available, a full copy of any error messages or reports that were displayed.
 * If possible the time and date when the problem occured.
-* The `bug` [label](https://github.com/alexandermendes/pybossa-analyst/labels).
+* The `bug` [label](https://github.com/alexandermendes/pybossa-gravatar/labels).
 
 
 ## Pull Requests
