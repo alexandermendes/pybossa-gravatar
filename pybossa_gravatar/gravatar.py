@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-"""Main module for pybossa-gravatar."""
+"""Gravatar module for pybossa-gravatar."""
 
 import urllib
 import hashlib
@@ -11,7 +11,26 @@ from pybossa.core import user_repo, uploader
 
 
 class Gravatar(object):
-    """Gravatar class for downloading and setting gravatars for users."""
+    """Gravatar class for downloading and setting gravatars for users.
+    
+    Parameters
+    ----------
+    app : obj
+        The Flask application.
+    
+    Attributes
+    ----------
+    size : int
+        The size of downloaded image.
+    default : str
+        The default image to use if Gravatar is not found.
+    rating : str
+        The highest acceptable image rating. 
+    force_default : bool
+        True if the default image should always be used, False otherwise.
+    ssl : bool
+        True is SSL should be used, False otherwise.
+    """
 
     def __init__(self, app):
         self.size = app.config['GRAVATAR_SIZE']
@@ -22,7 +41,15 @@ class Gravatar(object):
         
 
     def set(self, user, update_repo=True):
-        """Set a gravatar for a user."""
+        """Set a gravatar for a user.
+        
+        Parameters
+        ----------
+        user : User
+            The PyBossa user.
+        update_repo : bool, optional
+            Update the user repository if True (the default is True).
+        """
         url = self._get_url(user)
         
         now = time.time()
