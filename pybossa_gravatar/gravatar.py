@@ -20,8 +20,11 @@ class Gravatar(object):
             
     
     def init_app(self, app):
-        self.default = app.config['GRAVATAR_DEFAULT']
         self.size = app.config['GRAVATAR_SIZE']
+        self.default = app.config['GRAVATAR_DEFAULT_IMAGE']
+        self.rating = app.config['GRAVATAR_SIZE']
+        self.force_default = app.config['GRAVATAR_FORCE_DEFAULT']
+        self.ssl = app.config['GRAVATAR_SECURE_REQUESTS']
         
 
     def set(self, user, update_repo=True):
@@ -45,9 +48,15 @@ class Gravatar(object):
     def _get_url(self, user):
         """Return the gravatar URL."""
         email = user.email_addr.lower()
-        e_hash = hashlib.md5(email).hexdigest()
-        params = urllib.urlencode({'d': self.default, 's': self.size})
-        return 'http://www.gravatar.com/avatar/{0}?{1}'.format(e_hash, params)
+        email_hash = hashlib.md5(email).hexdigest()
+        force_default = 'y' if self.force_default else 'n'
+        params = urllib.urlencode({'s': self.size, 'd': self.default,
+                                   'r': self.rating, 'f': force_default})
+        
+        ssl = 's' if self.ssl else ''  
+        base_url = u'http{0}://www.gravatar.com/avatar/{0}?{1}'
+        
+        return base_url.format(ssl, email_hash, params)
     
     
     def _download(self, filename, container, url):
