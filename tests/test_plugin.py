@@ -1,14 +1,12 @@
 # -*- coding: utf8 -*-
 
 import os
-import time
 import pybossa_gravatar
 from mock import patch, MagicMock
 from helper import web
 from default import Test, with_context
 from factories import UserFactory
 from flask.ext.login import current_user
-from pybossa.core import plugin_manager
 
 
 class TestPluginSetup(Test):

@@ -3,7 +3,6 @@
 import default_settings
 from flask.ext.plugins import Plugin
 from flask import current_app as app
-from flask import redirect, url_for
 from pybossa.model.user import User
 from sqlalchemy import event
 from flask.ext.login import current_user, login_required
