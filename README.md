@@ -19,7 +19,7 @@ and reboot the PyBossa server.
 
 ## Configuration
 
-To modify the [default settings](default_settings.py) add the setting you want
+To modify the [default settings](pybossa_gravatar/default_settings.py) add the setting you want
 to change to your main PyBossa configuration file. See the
 [gravatar documentation](http://en.gravatar.com/site/implement/images/) for an
 explanation of each setting.
@@ -29,10 +29,8 @@ explanation of each setting.
 
 Once the plugin is installed a gravatar will be set as the default avatar for
 all new users. Users can replace this by uploading their own avatar in the usual
-way.
-
-Signed in users can also switch back to their gravatar at any time by sending the
-following request (perhaps via a button on their profile page):
+way. Signed in users can also switch to using a gravatar at any time by sending
+the following request (perhaps via a button on their profile page):
 
 ```
 POST http://{pybossa-site-url}/account/set-gravatar
