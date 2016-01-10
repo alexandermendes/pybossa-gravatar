@@ -8,18 +8,12 @@ import time
 from werkzeug import secure_filename
 from pybossa.cache import users as cached_users
 from pybossa.core import user_repo, uploader
-from pybossa.model.user import User
 
 
 class Gravatar(object):
+    """Gravatar class for downloading and setting gravatars for users."""
 
-    def __init__(self, app=None):
-        self.app = app
-        if app is not None:
-            self.init_app(app)
-            
-    
-    def init_app(self, app):
+    def __init__(self, app):
         self.size = app.config['GRAVATAR_SIZE']
         self.default = app.config['GRAVATAR_DEFAULT_IMAGE']
         self.rating = app.config['GRAVATAR_SIZE']
@@ -32,7 +26,7 @@ class Gravatar(object):
         url = self._get_url(user)
         
         now = time.time()
-        filename = secure_filename('{0}_gravatar.png'.format(now))
+        filename = secure_filename('{0}_avatar.png'.format(now))
         container = 'user_{0}'.format(user.id)
         
         self._download(filename, container, url)
@@ -60,6 +54,7 @@ class Gravatar(object):
     
     
     def _download(self, filename, container, url):
+        """Download the gravatar."""
         dl_dir = os.path.join(uploader.upload_folder, container)
         
         if not os.path.isdir(dl_dir):  # pragma: no cover
