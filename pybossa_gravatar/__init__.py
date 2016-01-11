@@ -8,7 +8,6 @@ from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
 from pybossa.model.user import User
 from pybossa.core import user_repo
-from pybossa.auth import ensure_authorized_to
 from sqlalchemy import event
 from gravatar import Gravatar
 
@@ -48,6 +47,7 @@ class PyBossaGravatar(Plugin):
     
     def setup_url_rule(self):
         """Setup URL rule."""
+        from pybossa.auth import ensure_authorized_to
         
         @app.route('/account/<name>/update/gravatar/set')
         @login_required
