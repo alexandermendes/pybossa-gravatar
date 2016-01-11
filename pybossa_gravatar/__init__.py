@@ -1,11 +1,15 @@
 # -*- coding: utf8 -*-
 
 import default_settings
-from flask.ext.plugins import Plugin
 from flask import current_app as app
-from pybossa.model.user import User
-from sqlalchemy import event
+from flask import redirect, url_for, flash, Blueprint, request, abort
+from flask.ext.plugins import Plugin
+from flask.ext.babel import gettext
 from flask.ext.login import current_user, login_required
+from pybossa.model.user import User
+from pybossa.core import user_repo
+from pybossa.auth import ensure_authorized_to
+from sqlalchemy import event
 from gravatar import Gravatar
 
 __plugin__ = "PyBossaGravatar"
@@ -45,9 +49,19 @@ class PyBossaGravatar(Plugin):
     def setup_url_rule(self):
         """Setup URL rule."""
         
-        @app.route('/account/set-gravatar', methods=['POST'])
+        @app.route('/account/<name>/update/gravatar/set')
         @login_required
-        def set_gravatar():  # pragma: no cover
-            """Set gravatar for the current user."""
-            self.gravatar.set(current_user)
+        def set_gravatar(name):  # pragma: no cover
+            """Set gravatar for a user."""
+            user = user_repo.get_by(name=name)
+            if not user:
+                abort(404)
+            
+            ensure_authorized_to('update', user)
+            
+            self.gravatar.set(user)
+            flash(gettext('Your avatar has been updated! It may \
+                          take some minutes to refresh...'), 'success')
+            
+            return redirect(url_for('account.update_profile', name=user.name))
             
