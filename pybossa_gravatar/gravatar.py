@@ -29,7 +29,7 @@ class Gravatar(object):
     force_default : bool
         True if the default image should always be used, False otherwise.
     ssl : bool
-        True is SSL should be used, False otherwise.
+        True if SSL should be used, False otherwise.
     """
 
     def __init__(self, app):
