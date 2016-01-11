@@ -6,14 +6,14 @@ from mock import patch, MagicMock
 from helper import web
 from default import Test, with_context
 from factories import UserFactory
-from flask.ext.login import current_user
 
 
-class TestPluginSetup(Test):
+class TestSetup(Test):
     
     
+    @with_context
     def setUp(self):
-        super(TestPluginSetup, self).setUp()
+        super(TestSetup, self).setUp()
         self.flask_app.config.from_object(pybossa_gravatar.default_settings)
         plugin_dir = os.path.dirname(pybossa_gravatar.__file__)
         self.plugin = pybossa_gravatar.PyBossaGravatar(plugin_dir)
@@ -34,49 +34,34 @@ class TestPluginSetup(Test):
         self.plugin.load_config()
         
         assert self.flask_app.config['GRAVATAR_SIZE'] == 42
-    
-    
-    @with_context
-    def test_set_gravatar_rule_registered(self):
-        self.plugin.setup_url_rule()
-        rules = [str(r) for r in self.flask_app.url_map.iter_rules()]
-        
-        assert '/account/set-gravatar' in rules
+
+
+class TestEventListener(Test):
     
     
     @with_context
     @patch('pybossa_gravatar.gravatar.Gravatar.set', return_value=True)
     def test_event_listener_works(self, mock_set):
-        self.plugin.setup_event_listener()
         user = UserFactory.create()
         
         assert mock_set.called_with(user)
+
+
+
+class TestURLRule(web.Helper):
     
     
     @with_context
-    @patch('pybossa_gravatar.PyBossaGravatar.load_config')
-    @patch('pybossa_gravatar.PyBossaGravatar.setup_event_listener')
-    @patch('pybossa_gravatar.PyBossaGravatar.setup_url_rule')
-    def test_all_methods_called_on_setup(self, setup_url_rule,
-                                         setup_event_listener, load_config):
-        load_config.return_value = True
-        setup_event_listener.return_value = True
-        setup_url_rule.return_value = True
-        self.plugin.setup()
+    def test_url_rule_registered(self):
+        rules = [str(r) for r in self.flask_app.url_map.iter_rules()]
         
-        assert load_config.called
-        assert setup_event_listener.called
-        assert setup_url_rule.called
-        
-        
-
-
-class TestView(web.Helper):
+        assert '/account/<name>/update/gravatar/set' in rules
     
     
     @with_context
     def test_anon_user_cannot_set_gravatar_via_url(self,):
-        res = self.app.post('/account/set-gravatar', follow_redirects=True)
+        res = self.app.get('/account/joebloggs/update/gravatar/set',
+                            follow_redirects=True)
         
         assert "Please sign in to access this page" in res.data
         
@@ -87,7 +72,8 @@ class TestView(web.Helper):
     def test_current_user_can_set_gravatar_via_url(self, mock_set, mock_user):
         mock_user = MagicMock()
         self.signin()
-        self.app.post('/account/set-gravatar', follow_redirects=True)
+        self.app.get('/account/{0}/update/gravatar/set'.format(mock_user.name),
+                      follow_redirects=True)
         
         assert mock_set.called_with(mock_user)
         
