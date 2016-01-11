@@ -11,7 +11,7 @@ from pybossa.core import user_repo, uploader
 
 
 class Gravatar(object):
-    """Gravatar class for downloading and setting gravatars for users.
+    """Gravatar class for downloading and setting Gravatars for users.
     
     Parameters
     ----------
@@ -21,9 +21,9 @@ class Gravatar(object):
     Attributes
     ----------
     size : int
-        The size of downloaded image.
+        The size of the image.
     default : str
-        The default image to use if Gravatar is not found.
+        The image to use if a matching Gravatar is not found.
     rating : str
         The highest acceptable image rating. 
     force_default : bool
@@ -41,14 +41,14 @@ class Gravatar(object):
         
 
     def set(self, user, update_repo=True):
-        """Set a gravatar for a user.
+        """Set a Gravatar for a user.
         
         Parameters
         ----------
         user : User
             The PyBossa user.
         update_repo : bool, optional
-            Update the user repository if True (the default is True).
+            True to save changes, False otherwise (the default is True).
         """
         url = self._get_url(user)
         
@@ -67,7 +67,7 @@ class Gravatar(object):
     
     
     def _get_url(self, user):
-        """Return the gravatar URL."""
+        """Return the Gravatar URL."""
         email = user.email_addr.lower()
         email_hash = hashlib.md5(email).hexdigest()
         force_default = 'y' if self.force_default else 'n'
@@ -81,7 +81,7 @@ class Gravatar(object):
     
     
     def _download(self, filename, container, url):
-        """Download the gravatar."""
+        """Download the Gravatar."""
         dl_dir = os.path.join(uploader.upload_folder, container)
         
         if not os.path.isdir(dl_dir):  # pragma: no cover
