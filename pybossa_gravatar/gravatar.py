@@ -58,6 +58,9 @@ class Gravatar(object):
         
         self._download(filename, container, url)
         
+        if not user.info:
+            user.info = dict()
+            
         user.info['avatar'] = filename
         user.info['container'] = container
         

@@ -9,7 +9,7 @@ from flask.ext.login import current_user, login_required
 from gravatar import Gravatar
 
 __plugin__ = "PyBossaGravatar"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 
 class PyBossaGravatar(Plugin):
