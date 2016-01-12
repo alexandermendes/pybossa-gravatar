@@ -71,16 +71,14 @@ class Gravatar(object):
 
     def _get_url(self, user):
         """Return the Gravatar URL."""
-        email = user.email_addr.lower()
-        email_hash = hashlib.md5(email).hexdigest()
+        email = hashlib.md5(user.email_addr).hexdigest()
         force_default = 'y' if self.force_default else 'n'
         params = urllib.urlencode({'s': self.size, 'd': self.default,
                                    'r': self.rating, 'f': force_default})
 
-        ssl = 's' if self.ssl else ''
-        base_url = u'http{0}://www.gravatar.com/avatar/{0}?{1}'
-
-        return base_url.format(ssl, email_hash, params)
+        base = 'https://secure' if self.ssl else 'http://www'
+        
+        return u'{0}.gravatar.com/avatar/{1}?{2}'.format(base, email, params)
 
 
     def _download(self, filename, container, url):
