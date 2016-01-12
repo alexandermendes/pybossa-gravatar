@@ -35,7 +35,7 @@ class Gravatar(object):
     def __init__(self, app):
         self.size = app.config['GRAVATAR_SIZE']
         self.default = app.config['GRAVATAR_DEFAULT_IMAGE']
-        self.rating = app.config['GRAVATAR_SIZE']
+        self.rating = app.config['GRAVATAR_RATING']
         self.force_default = app.config['GRAVATAR_FORCE_DEFAULT']
         self.ssl = app.config['GRAVATAR_SECURE_REQUESTS']
 
