@@ -10,12 +10,12 @@ from pybossa.cache import users as cached_users
 from pybossa.core import user_repo, uploader
 
 
-class Gravatar(object):
+class GravatarClient(object):
     """Gravatar class for downloading and setting Gravatars for users.
 
     Parameters
     ----------
-    app : obj
+    app : obj, optional
         The Flask application.
 
     Attributes
@@ -31,8 +31,14 @@ class Gravatar(object):
     ssl : bool
         True if SSL should be used, False otherwise.
     """
+    
+    def __init__(self, app=None):
+        self.app = app
+        if app:
+            self.init_app(app)
 
-    def __init__(self, app):
+    def init_app(self, app):
+        """Configure the Gravatar client."""
         self.size = app.config['GRAVATAR_SIZE']
         self.default = app.config['GRAVATAR_DEFAULT_IMAGE']
         self.rating = app.config['GRAVATAR_RATING']
