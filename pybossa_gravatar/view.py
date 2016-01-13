@@ -10,7 +10,7 @@ from . import gravatar
 
 
 @login_required
-def set_gravatar(name): 
+def set_gravatar(name):
     """Set gravatar for a user."""
     user = user_repo.get_by(name=name)
     if not user:

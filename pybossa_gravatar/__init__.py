@@ -28,8 +28,8 @@ class PyBossaGravatar(Plugin):
         for s in settings:
             if not app.config.get(s):
                 app.config[s] = getattr(default_settings, s)
-    
-    
+
+
     def setup_url_rules(self):
         """Configure URL rules."""
         from . import view

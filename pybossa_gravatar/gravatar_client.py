@@ -31,7 +31,7 @@ class GravatarClient(object):
     ssl : bool
         True if SSL should be used, False otherwise.
     """
-    
+
     def __init__(self, app=None):
         self.app = app
         if app:  # pragma: no cover
@@ -83,7 +83,7 @@ class GravatarClient(object):
                                    'r': self.rating, 'f': force_default})
 
         base = 'https://secure' if self.ssl else 'http://www'
-        
+
         return u'{0}.gravatar.com/avatar/{1}?{2}'.format(base, email, params)
 
 

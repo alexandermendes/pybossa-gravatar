@@ -15,4 +15,3 @@ def setUpPackage():
     with flask_app.app_context():
         plugin_dir = os.path.dirname(plugin.__file__)
         plugin.PyBossaGravatar(plugin_dir).setup()
-    
