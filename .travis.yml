@@ -29,6 +29,7 @@ script:
   - alembic -c alembictest.ini stamp head
   - alembic -c alembictest.ini upgrade head
   - cd ..
-  - nosetests -d
+  - nosetests tests/
 after_success:
+  - pip install coveralls
   - coveralls
