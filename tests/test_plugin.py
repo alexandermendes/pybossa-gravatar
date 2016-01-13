@@ -3,61 +3,69 @@
 import os
 import hashlib
 import pybossa_gravatar as plugin
-from pybossa_gravatar import view
 from mock import patch, MagicMock
-from helper import web
+from sqlalchemy import event
+from pybossa.model.user import User
+
 from factories import UserFactory
 from default import Test, with_context
+from .base import PluginHelper
+        
 
 class TestEventListener(Test):
     
     @with_context
     @patch('pybossa_gravatar.event_listeners.gravatar.set', return_value=True)
-    def test_event_listener_works(self, mock_set):
+    def test_gravtar_set_on_add_user_event(self, mock_set):
         target = MagicMock()
         conn = MagicMock()
         plugin.event_listeners.add_user_event(None, conn, target)
         
         assert mock_set.called_with(target)
+    
 
-
-class TestView(web.Helper):
-
-    @with_context
-    def setUp(self):
-        super(TestView, self).setUp()
-        self.flask_app.config.from_object(plugin.default_settings)
-        plugin_dir = os.path.dirname(plugin.__file__)
-        plugin.PyBossaGravatar(plugin_dir).setup()
+class TestView(PluginHelper):
 
     
     @with_context
-    def test_anon_user_cannot_set_gravatar_via_url(self):
+    @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
+    def test_anon_user_redirected_to_sign_in(self, mock_set):
+        self.setup_plugin()
         res = self.app.get('/account/joebloggs/update/gravatar/set',
                             follow_redirects=True)
         
         assert "Please sign in to access this page" in res.data
+    
+    
+    @with_context
+    @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
+    def test_unknown_user_not_found(self, mock_set):
+        self.register()
+        self.setup_plugin()
+        res = self.app.get('/account/joebloggs/update/gravatar/set',
+                            follow_redirects=True)
+        
+        assert res.status_code == 404
         
     
     @with_context
-    @patch('pybossa_gravatar.view.user_repo')
     @patch('pybossa_gravatar.view.ensure_authorized_to', return_value=True)
+    @patch('pybossa_gravatar.view.user_repo')
     @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
-    def test_authorised_user_can_set_gravatar_via_url(self, mock_set,
-                                                      ensure_authorized_to,
-                                                      mock_repo):
+    def test_authorised_user_can_set_gravatar(self, mock_set, mock_repo,
+                                              ensure_authorized_to):
         mock_user = MagicMock()
         mock_repo = MagicMock()
         mock_repo.return_value = mock_user
         self.register()
         self.signin()
-        res = self.app.get('/account/{}/update/gravatar/set'.format(self.name),
+        res = self.app.get('/account/{0}/update/gravatar/set'.format(self.name),
                             follow_redirects=True)
         
         assert mock_set.called_with(mock_user)
     
     
-class TestGravatar(Test):
+class TestGravatar(PluginHelper):
     
     
     def setUp(self):
@@ -67,13 +75,16 @@ class TestGravatar(Test):
     
     
     @with_context
-    @patch('pybossa_gravatar.gravatar_client.secure_filename', return_value='f')
+    @patch('pybossa_gravatar.gravatar_client.secure_filename',
+           return_value=True)
+    @patch('pybossa_gravatar.gravatar_client.user_repo')
     @patch('pybossa_gravatar.gravatar._download', return_value=True)
-    def test_avatar_set_for_user(self, _download, secure_filename):
+    def test_avatar_saved_for_user(self, _download, mock_repo, secure_filename):
+        mock_repo.update.return_value = True
         user = UserFactory.create()
-        plugin.gravatar.set(user, update_repo=False)
+        plugin.gravatar.set(user)
         
-        assert user.info['avatar'] == 'f'
+        assert mock_repo.update.called_with(user)
         
     
     @with_context

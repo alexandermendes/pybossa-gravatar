@@ -34,7 +34,7 @@ class GravatarClient(object):
     
     def __init__(self, app=None):
         self.app = app
-        if app:
+        if app:  # pragma: no cover
             self.init_app(app)
 
     def init_app(self, app):
