@@ -2,11 +2,8 @@
 
 import os
 import hashlib
-import pybossa_gravatar as plugin
+import pybossa_gravatar
 from mock import patch, MagicMock
-from sqlalchemy import event
-from pybossa.model.user import User
-
 from factories import UserFactory
 from default import Test, with_context
 from .base import PluginHelper
@@ -19,7 +16,7 @@ class TestEventListener(Test):
     def test_gravtar_set_on_add_user_event(self, mock_set):
         target = MagicMock()
         conn = MagicMock()
-        plugin.event_listeners.add_user_event(None, conn, target)
+        pybossa_gravatar.event_listeners.add_user_event(None, conn, target)
         
         assert mock_set.called_with(target)
     
@@ -30,7 +27,6 @@ class TestView(PluginHelper):
     @with_context
     @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
     def test_anon_user_redirected_to_sign_in(self, mock_set):
-        self.setup_plugin()
         res = self.app.get('/account/joebloggs/update/gravatar/set',
                             follow_redirects=True)
         
@@ -41,7 +37,6 @@ class TestView(PluginHelper):
     @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
     def test_unknown_user_not_found(self, mock_set):
         self.register()
-        self.setup_plugin()
         res = self.app.get('/account/joebloggs/update/gravatar/set',
                             follow_redirects=True)
         
@@ -68,12 +63,6 @@ class TestView(PluginHelper):
 class TestGravatar(PluginHelper):
     
     
-    def setUp(self):
-        super(TestGravatar, self).setUp()
-        self.flask_app.config.from_object(plugin.default_settings)
-        plugin.gravatar.init_app(self.flask_app)
-    
-    
     @with_context
     @patch('pybossa_gravatar.gravatar_client.secure_filename',
            return_value=True)
@@ -82,7 +71,7 @@ class TestGravatar(PluginHelper):
     def test_avatar_saved_for_user(self, _download, mock_repo, secure_filename):
         mock_repo.update.return_value = True
         user = UserFactory.create()
-        plugin.gravatar.set(user)
+        pybossa_gravatar.gravatar.set(user)
         
         assert mock_repo.update.called_with(user)
         
@@ -90,20 +79,20 @@ class TestGravatar(PluginHelper):
     @with_context
     @patch('pybossa_gravatar.gravatar._download', return_value=True)
     def test_correct_url_returned(self, _download):
-        plugin.gravatar.size = 42
-        plugin.gravatar.rating = 'pg'
-        plugin.gravatar.default = '404'
-        plugin.gravatar.force_default = True
+        pybossa_gravatar.gravatar.size = 42
+        pybossa_gravatar.gravatar.rating = 'pg'
+        pybossa_gravatar.gravatar.default = '404'
+        pybossa_gravatar.gravatar.force_default = True
         param = 's=42&r=pg&d=404&f=y'
         
-        plugin.gravatar.ssl = True
+        pybossa_gravatar.gravatar.ssl = True
         base = 'https://secure'
         
         user = UserFactory.create()
         email = hashlib.md5(user.email_addr).hexdigest()
         
         expected = u'{0}.gravatar.com/avatar/{1}?{2}'.format(base, email, param)
-        returned = plugin.gravatar._get_url(user)
+        returned = pybossa_gravatar.gravatar._get_url(user)
         
         assert expected == returned
     
@@ -120,6 +109,6 @@ class TestGravatar(PluginHelper):
         isdir.return_value = True
         
         path = os.path.join('upload_dir/user_1/fn')
-        plugin.gravatar._download('fn', 'user_1', 'http://example.com')
+        pybossa_gravatar.gravatar._download('fn', 'user_1', 'example.com')
         
-        assert urlretrieve.called_with('http://example.com', path)
+        assert urlretrieve.called_with('example.com', path)

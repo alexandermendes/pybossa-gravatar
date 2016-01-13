@@ -10,11 +10,10 @@ class PluginHelper(web.Helper):
     
     
     def setUp(self):
+        """Setup the plugin."""
         super(PluginHelper, self).setUp()
-    
-    
-    def setup_plugin(self):
         with self.flask_app.app_context():
             self.flask_app.config.from_object(plugin.default_settings)
             plugin_dir = os.path.dirname(plugin.__file__)
             plugin.PyBossaGravatar(plugin_dir).setup()
+            
