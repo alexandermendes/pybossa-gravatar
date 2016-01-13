@@ -6,7 +6,7 @@ import pybossa_gravatar
 from mock import patch, MagicMock
 from factories import UserFactory
 from default import Test, with_context
-from .base import PluginHelper
+from helper import web
         
 
 class TestEventListener(Test):
@@ -21,7 +21,7 @@ class TestEventListener(Test):
         assert mock_set.called_with(target)
     
 
-class TestView(PluginHelper):
+class TestView(web.Helper):
 
     
     @with_context
@@ -60,7 +60,7 @@ class TestView(PluginHelper):
         assert mock_set.called_with(mock_user)
     
     
-class TestGravatar(PluginHelper):
+class TestGravatar(Test):
     
     
     @with_context
