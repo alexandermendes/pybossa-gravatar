@@ -6,7 +6,7 @@ from flask.ext.plugins import Plugin
 from .extensions import gravatar
 
 __plugin__ = "PyBossaGravatar"
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 
 class PyBossaGravatar(Plugin):
