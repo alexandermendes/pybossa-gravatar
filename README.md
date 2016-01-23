@@ -3,26 +3,33 @@
 [![Build Status](https://travis-ci.org/alexandermendes/pybossa-gravatar.svg?branch=master)]
 (https://travis-ci.org/alexandermendes/pybossa-gravatar)
 [![Coverage Status](https://coveralls.io/repos/alexandermendes/pybossa-gravatar/badge.svg)]
-(https://coveralls.io/github/alexandermendes/pybossa-gravatar?branch=master) 
-[![Code Health](https://landscape.io/github/alexandermendes/pybossa-gravatar/master/landscape.svg)]
-(https://landscape.io/github/alexandermendes/pybossa-gravatar/master)
+(https://coveralls.io/github/alexandermendes/pybossa-gravatar?branch=master)
 
 A [PyBossa](https://github.com/PyBossa/pybossa) plugin for [Gravatar](http://en.gravatar.com/) integration.
 
 
 ## Installation
 
-Simply copy the [pybossa_gravatar](pybossa_gravatar) folder into your PyBossa 
-[plugins](https://github.com/PyBossa/pybossa/tree/master/pybossa/plugins) directory
-and reboot the PyBossa server.
+Copy the [pybossa_gravatar](pybossa_gravatar) folder into your PyBossa 
+[plugins](https://github.com/PyBossa/pybossa/tree/master/pybossa/plugins) directory. The 
+plugin will be available after you next restart the server. 
 
 
 ## Configuration
 
-To modify the [default settings](pybossa_gravatar/default_settings.py) add the setting you want
-to change to your main PyBossa configuration file. See the
-[Gravatar documentation](http://en.gravatar.com/site/implement/images/) for an
-explanation of each setting.
+The default configuration settings for pybossa-gravatar are:
+
+``` Python
+GRAVATAR_SIZE = 512
+GRAVATAR_DEFAULT_IMAGE = 'identicon'
+GRAVATAR_RATING = 'g'
+GRAVATAR_FORCE_DEFAULT = False
+GRAVATAR_SECURE_REQUESTS = False
+```
+
+You can modify these settings by adding them to your main PyBossa configuration file. 
+See the [Gravatar documentation](http://en.gravatar.com/site/implement/images/) for a
+description of each setting.
 
 
 ## Usage
@@ -36,16 +43,26 @@ http://{pybossa-site-url}/account/<name>/update/gravatar/set
 ```
 
 One option would be to add a button to
-[update.html](https://github.com/PyBossa/pybossa-default-theme/blob/master/templates/projects/update.html):
+[update.html](https://github.com/PyBossa/pybossa-default-theme/blob/master/templates/projects/update.html) 
+that will only appear if the plugin is installed, like this:
 
+``` HTML+Django
+{% if 'pybossa-gravatar' in plugins.keys() %}
+    <a href="{{url_for('set_gravatar', name=current_user.name)}}" class="btn btn-primary">
+        Import Gravatar
+    </a>
+{% endif %}
 ```
-<a href="{{url_for('set_gravatar', name=current_user.name)}}" class="btn btn-primary btn-large">
-    {{ _('Import') }} Gravatar
-</a>
-```
+
+
+## Testing
+
+This plugin makes use of the PyBossa test suite while running tests. The
+[Travis CI configuration file](.travis.yml) contains all of the required commands to set
+up a test environment and run the tests.
 
 
 ## Contributing
 
-For guidelines on how to suggest improvements, report bugs or submit pull
-requests please refer to [CONTRIBUTING.md](CONTRIBUTING.md).
+See the [CONTRIBUTING](CONTRIBUTING.md) file for guidelines on how to suggest improvements, 
+report bugs or submit pull requests.
