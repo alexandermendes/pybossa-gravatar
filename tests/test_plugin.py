@@ -11,7 +11,6 @@ from helper import web
 
 class TestEventListener(Test):
 
-
     @with_context
     @patch('pybossa_gravatar.event_listeners.gravatar.set', return_value=True)
     def test_gravtar_set_on_add_user_event(self, mock_set):
@@ -24,7 +23,6 @@ class TestEventListener(Test):
 
 class TestView(web.Helper):
 
-
     @with_context
     @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
     def test_anon_user_redirected_to_sign_in(self, mock_set):
@@ -32,7 +30,6 @@ class TestView(web.Helper):
                            follow_redirects=True)
 
         assert "Please sign in to access this page" in res.data
-
 
     @with_context
     @patch('pybossa_gravatar.view.gravatar.set', return_value=True)
@@ -42,7 +39,6 @@ class TestView(web.Helper):
                            follow_redirects=True)
 
         assert res.status_code == 404
-
 
     @with_context
     @patch('pybossa_gravatar.view.ensure_authorized_to', return_value=True)
@@ -63,7 +59,6 @@ class TestView(web.Helper):
 
 class TestGravatar(Test):
 
-
     @with_context
     @patch('pybossa_gravatar.gravatar_client.secure_filename',
            return_value=True)
@@ -76,7 +71,6 @@ class TestGravatar(Test):
 
         assert mock_repo.update.called_with(user)
 
-
     @with_context
     @patch('pybossa_gravatar.gravatar._download', return_value=True)
     def test_correct_url_returned(self, _download):
@@ -84,20 +78,16 @@ class TestGravatar(Test):
         pybossa_gravatar.gravatar.rating = 'pg'
         pybossa_gravatar.gravatar.default = '404'
         pybossa_gravatar.gravatar.force_default = True
-        params = 's=42&r=pg&d=404&f=y'
-
         pybossa_gravatar.gravatar.ssl = True
+        params = 's=42&r=pg&d=404&f=y'
         base = 'https://secure'
-
         user = UserFactory.create()
         email_hash = hashlib.md5(user.email_addr).hexdigest()
-
         expected = u'{0}.gravatar.com/avatar/{1}?{2}'.format(base, email_hash,
                                                              params)
         returned = pybossa_gravatar.gravatar._get_url(user)
 
         assert expected == returned
-
 
     @with_context
     @patch('pybossa_gravatar.gravatar_client.urllib.urlretrieve')
@@ -109,7 +99,6 @@ class TestGravatar(Test):
         mock_uploader.upload_folder.return_value = 'upload_dir'
         urlretrieve.return_value = True
         isdir.return_value = True
-
         path = os.path.join('upload_dir/user_1/fn')
         pybossa_gravatar.gravatar._download('fn', 'user_1', 'example.com')
 

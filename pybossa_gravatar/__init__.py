@@ -12,14 +12,12 @@ __version__ = "0.2.4"
 class PyBossaGravatar(Plugin):
     """A PyBossa plugin for Gravatar integration."""
 
-
     def setup(self):
         """Setup the plugin."""
         self.load_config()
         gravatar.init_app(app)
         self.setup_url_rules()
         from . import event_listeners
-
 
     def load_config(self):
         """Configure the plugin."""
@@ -28,7 +26,6 @@ class PyBossaGravatar(Plugin):
         for s in settings:
             if not app.config.get(s):
                 app.config[s] = getattr(default_settings, s)
-
 
     def setup_url_rules(self):
         """Configure URL rules."""
