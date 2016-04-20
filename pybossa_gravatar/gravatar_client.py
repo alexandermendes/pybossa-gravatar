@@ -45,7 +45,6 @@ class GravatarClient(object):
         self.force_default = app.config['GRAVATAR_FORCE_DEFAULT']
         self.ssl = app.config['GRAVATAR_SECURE_REQUESTS']
 
-
     def set(self, user, update_repo=True):
         """Set a Gravatar for a user.
 
@@ -74,7 +73,6 @@ class GravatarClient(object):
             user_repo.update(user)
             cached_users.delete_user_summary(user.name)
 
-
     def _get_url(self, user):
         """Return the Gravatar URL."""
         email = hashlib.md5(user.email_addr).hexdigest()
@@ -83,9 +81,7 @@ class GravatarClient(object):
                                    'r': self.rating, 'f': force_default})
 
         base = 'https://secure' if self.ssl else 'http://www'
-
         return u'{0}.gravatar.com/avatar/{1}?{2}'.format(base, email, params)
-
 
     def _download(self, filename, container, url):
         """Download the Gravatar."""
