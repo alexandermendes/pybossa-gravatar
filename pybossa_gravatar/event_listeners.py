@@ -8,5 +8,5 @@ from . import gravatar
 
 @event.listens_for(User, 'before_insert')
 def add_user_event(mapper, conn, target):
-    """Set Gravatar for new users."""
+    """Set Gravatar by default for new users."""
     gravatar.set(target, update_repo=False)
