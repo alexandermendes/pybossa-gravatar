@@ -1,4 +1,5 @@
 # -*- coding: utf8 -*-
+"""A PyBossa plugin for Gravatar integration."""
 
 import default_settings
 from flask import current_app as app
@@ -10,7 +11,7 @@ __version__ = "0.2.4"
 
 
 class PyBossaGravatar(Plugin):
-    """A PyBossa plugin for Gravatar integration."""
+    """PyBossa Gravatar plugin class."""
 
     def setup(self):
         """Setup the plugin."""

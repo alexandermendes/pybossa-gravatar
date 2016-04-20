@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-"""Gravatar module for pybossa-gravatar."""
+"""Gravatar client module for pybossa-gravatar."""
 
 import urllib
 import hashlib
@@ -11,25 +11,15 @@ from pybossa.core import user_repo, uploader
 
 
 class GravatarClient(object):
-    """Gravatar class for downloading and setting Gravatars for users.
+    """Gravatar client class.
 
-    Parameters
-    ----------
-    app : obj, optional
-        The Flask application.
+    :param app: The pybossa application.
 
-    Attributes
-    ----------
-    size : int
-        The size of the image.
-    default : str
-        The image to use if a matching Gravatar is not found.
-    rating : str
-        The highest acceptable image rating.
-    force_default : bool
-        True if the default image should always be used, False otherwise.
-    ssl : bool
-        True if SSL should be used, False otherwise.
+    :ivar size: The size of the image.
+    :ivar default: The image to use if a matching Gravatar is not found.
+    :ivar rating: The highest acceptable image rating.
+    :ivar force_default: True to use always use default image, False otherwise.
+    :ivar ssl: True if SSL should be used, False otherwise.
     """
 
     def __init__(self, app=None):
@@ -38,7 +28,7 @@ class GravatarClient(object):
             self.init_app(app)
 
     def init_app(self, app):
-        """Configure the Gravatar client."""
+        """Configure the client."""
         self.size = app.config['GRAVATAR_SIZE']
         self.default = app.config['GRAVATAR_DEFAULT_IMAGE']
         self.rating = app.config['GRAVATAR_RATING']
@@ -48,12 +38,8 @@ class GravatarClient(object):
     def set(self, user, update_repo=True):
         """Set a Gravatar for a user.
 
-        Parameters
-        ----------
-        user : User
-            The PyBossa user.
-        update_repo : bool, optional
-            True to save changes, False otherwise (the default is True).
+        :param user: The user.
+        :param update_repo: True to save changes, False otherwise.
         """
         url = self._get_url(user)
 
@@ -74,7 +60,7 @@ class GravatarClient(object):
             cached_users.delete_user_summary(user.name)
 
     def _get_url(self, user):
-        """Return the Gravatar URL."""
+        """Return the Gravatar URL for a user."""
         email = hashlib.md5(user.email_addr).hexdigest()
         force_default = 'y' if self.force_default else 'n'
         params = urllib.urlencode({'s': self.size, 'd': self.default,

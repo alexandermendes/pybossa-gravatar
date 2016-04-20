@@ -11,7 +11,10 @@ from . import gravatar
 
 @login_required
 def set_gravatar(name):
-    """Set gravatar for a user."""
+    """Set gravatar for a user
+
+    :param name: the name of the user.
+    """
     user = user_repo.get_by(name=name)
     if not user:
         abort(404)
