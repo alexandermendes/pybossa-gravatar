@@ -1,9 +1,7 @@
 # pybossa-gravatar
 
-[![Build Status](https://travis-ci.org/alexandermendes/pybossa-gravatar.svg?branch=master)]
-(https://travis-ci.org/alexandermendes/pybossa-gravatar)
-[![Coverage Status](https://coveralls.io/repos/alexandermendes/pybossa-gravatar/badge.svg)]
-(https://coveralls.io/github/alexandermendes/pybossa-gravatar?branch=master)
+[![Build Status](https://travis-ci.org/alexandermendes/pybossa-gravatar.svg?branch=master)](https://travis-ci.org/alexandermendes/pybossa-gravatar)
+[![Coverage Status](https://coveralls.io/repos/alexandermendes/pybossa-gravatar/badge.svg)](https://coveralls.io/github/alexandermendes/pybossa-gravatar?branch=master)
 
 A [PyBossa](https://github.com/PyBossa/pybossa) plugin for [Gravatar](http://en.gravatar.com/) integration.
 
